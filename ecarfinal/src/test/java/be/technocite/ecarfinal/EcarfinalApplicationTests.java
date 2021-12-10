@@ -1,10 +1,10 @@
-package be.technocite.ecar;
+package be.technocite.ecarfinal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EcarApplicationTests {
+class EcarfinalApplicationTests {
 
 	@Test
 	void contextLoads() {
