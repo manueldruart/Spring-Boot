@@ -1,9 +1,9 @@
-package be.spring.ioc.Exercice1;
+package be.spring.ioc.Exercice1ApplicationContext;
 
 import org.springframework.stereotype.Component;
 
-@Component
-public class XMLBookImporter implements IBookImporter{
+@Component("XMLImporter")
+public class XMLBookImporter implements IBookImporter {
 
     @Override
     public void importer() {
