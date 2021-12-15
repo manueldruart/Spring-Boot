@@ -1,47 +1,71 @@
 package be.technocite.ecarfinal.car.service;
 
+import be.technocite.ecarfinal.car.converter.CarBuyerConverter;
+import be.technocite.ecarfinal.car.converter.CarRetailerConverter;
+import be.technocite.ecarfinal.car.dao.ICarDao;
+import be.technocite.ecarfinal.car.exception.CarConflictException;
 import be.technocite.ecarfinal.car.modele.Car;
+import be.technocite.ecarfinal.carapi.dto.CarDtoBuyer;
+import be.technocite.ecarfinal.carapi.dto.CarDtoRetailer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
+    @Autowired
+    private ICarDao dao;
 
-    private ArrayList<Car> cars = new ArrayList<>();
+    @Autowired
+    private CarBuyerConverter buyerConverter;
 
-    @PostConstruct
-    private void onPostConstruct() {
-        cars.add(new Car(
-                "MERCEDES",
-                14999.99,
-                10000.00,
-                "AB9",
-                new Date()
-        ));
-        cars.add(new Car(
-                "BMW",
-                19999.99,
-                15000.00,
-                "AC9",
-                new Date()
-        ));
+    @Autowired
+    private CarRetailerConverter retailerConverter;
+
+    public List<CarDtoBuyer> getAllCars() {
+        return dao.findAll()
+                .stream()
+                .map(buyerConverter)
+                .collect(Collectors.toList());
     }
 
-    public List<Car> getAllCars() {
-        return this.cars;
+    public CarDtoBuyer getCarById(int id) {
+        return buyerConverter.apply(dao.findById(id));
     }
 
-    public Car getCarById( int id) {
-       return this.cars.stream()
-                .filter(car -> car.getId() == id)
-                .findFirst()
-                .get();
+    public boolean delete(int id) {
+        return dao.delete(id);
+    }
+
+    public CarDtoBuyer updateCar(CarDtoBuyer carDto) {
+        Car car = dao.findById(carDto.getId());
+
+        if (car != null) {
+            car.setMarketPrice(carDto.getMarketPrice());
+            return buyerConverter.apply(dao.save(car));
+        } else {
+            return null;
+        }
+    }
+
+    public CarDtoRetailer addCar(CarDtoRetailer carDto) {
+        Car car = dao.findById(carDto.getId());
+
+        if (car != null) {
+            throw new CarConflictException(car.getId());
+        } else {
+            Car entiteDb = dao.save(new Car(
+                    carDto.getBrand(),
+                    carDto.getBuyingPrice(),
+                    carDto.getMarketPrice(),
+                    carDto.getVin(),
+                    carDto.getYear()
+            ));
+            return retailerConverter.apply(entiteDb);
+        }
     }
 }
+
 

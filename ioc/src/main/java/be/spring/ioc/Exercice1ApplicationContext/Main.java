@@ -22,6 +22,7 @@ public class Main implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("adresse du pointer dans main" + bookShelf);
         bookShelf.importAndReadOrder();
     }
 }

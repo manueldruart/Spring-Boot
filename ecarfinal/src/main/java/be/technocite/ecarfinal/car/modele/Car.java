@@ -1,12 +1,13 @@
 package be.technocite.ecarfinal.car.modele;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Car {
     private static int idIndex;
     private int id;
     private String brand;
-    private double originalPrice;
+    private double buyingPrice;
     private double marketPrice;
     private String vin;
     private Date year;
@@ -16,7 +17,7 @@ public class Car {
         idIndex++;
         this.id = idIndex;
         this.brand = brand;
-        this.originalPrice = originalPrice;
+        this.buyingPrice = originalPrice;
         this.marketPrice = marketPrice;
         this.vin = vin;
         this.year = year;
@@ -38,12 +39,12 @@ public class Car {
         this.brand = brand;
     }
 
-    public double getOriginalPrice() {
-        return originalPrice;
+    public double getBuyingPrice() {
+        return buyingPrice;
     }
 
-    public void setOriginalPrice(double originalPrice) {
-        this.originalPrice = originalPrice;
+    public void setBuyingPrice(double buyingPrice) {
+        this.buyingPrice = buyingPrice;
     }
 
     public double getMarketPrice() {
@@ -70,4 +71,16 @@ public class Car {
         this.year = year;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return id == car.id && Double.compare(car.buyingPrice, buyingPrice) == 0 && brand.equals(car.brand) && vin.equals(car.vin) && year.equals(car.year);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, brand, buyingPrice, marketPrice, vin, year);
+    }
 }

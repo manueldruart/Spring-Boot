@@ -9,19 +9,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class IocApplication implements CommandLineRunner {
 
-	@Autowired
-	private HelloWorldService helloWorldService;
+    @Autowired
+    private HelloWorldService helloWorldService;
 
-	public static void main(String[] args) {
-		SpringApplication app = new SpringApplication(IocApplication.class);
-		app.setBannerMode(Banner.Mode.OFF);
-		app.run(args);
-	}
+    public static void main(String[] args) {
+        SpringApplication app = new SpringApplication(IocApplication.class);
+        app.setBannerMode(Banner.Mode.OFF);
+        app.run(args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		helloWorldService.sayHello();
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        helloWorldService.sayHello();
+    }
 }
 
 
